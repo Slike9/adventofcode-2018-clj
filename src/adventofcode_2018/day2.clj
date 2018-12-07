@@ -25,21 +25,22 @@
   [coll n]
   (count-predicate #(contains-any-char-n-times? % n) coll))
 
-(defn count-different-chars
+(defn strs-differ-by-one-char?
   [s1 s2]
-  (->> (range (.length s1))
-       (count-predicate #(not (= (.charAt s1 %) (.charAt s2 %))))))
-
-(defn less-than?
-  [o1 o2]
-  (neg? (compare o1 o2)))
+  (let [length (count s1)]
+    (loop [i 0 diffs 0]
+      (cond (> diffs 1) false
+            (= i length) (= diffs 1)
+            (< i length) (recur (inc i) (if (= (nth s1 i) (nth s2 i)) diffs (inc diffs)))))))
 
 (defn find-strs-diffrent-by-one-char
   [coll]
-  (for [s1 coll
-        s2 coll
-        :when (and (less-than? s1 s2) (= (count-different-chars s1 s2) 1))]
-    [s1 s2]))
+  (for [i (range (count coll))
+        j (range (inc i) (count coll))
+        :let [si (nth coll i)
+              sj (nth coll j)]
+        :when (strs-differ-by-one-char? si sj)]
+    [si sj]))
 
 (defn common-chars
   [s1 s2]

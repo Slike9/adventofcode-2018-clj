@@ -10,9 +10,10 @@
   (testing
     (is (= 2 (count-contain-any-char-n-times ["aabc", "abcd", "bbca"] 2)))))
 
-(deftest count-different-chars-test
+(deftest strs-differ-by-one-char?-test
   (testing
-    (is (= 1 (count-different-chars "abcd" "accd")))))
+    (is (strs-differ-by-one-char? "abcd" "accd"))
+    (is (not (strs-differ-by-one-char? "abcd" "accc")))))
 
 (deftest find-strs-diffrent-by-one-char-test
   (testing

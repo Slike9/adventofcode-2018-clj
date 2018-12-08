@@ -1,5 +1,4 @@
 (ns adventofcode-2018.day1
-  (:gen-class)
   (:require [clojure.java.io :as jio]))
 
 ; Utils
@@ -14,21 +13,19 @@
 (defn cumulative-sums
   ([coll] (cumulative-sums coll 0))
   ([coll init]
-   (if (empty? coll)
-     init
-     (lazy-seq
-       (let [[x & more] coll]
-         (cons init (cumulative-sums more (+ init x))))))))
+   (if (seq coll)
+     (cons init (lazy-seq (cumulative-sums (rest coll) (+ init (first coll)))))
+     (list init))))
 
 (defn first-duplicate
   ([coll] (first-duplicate coll #{}))
   ([coll met]
-   (if (empty? coll)
-     nil
-     (let [[x & more] coll]
+   (if (seq coll)
+     (let [x (first coll)]
        (if (met x)
          x
-         (recur more (conj met x)))))))
+         (recur (rest coll) (conj met x))))
+     nil)))
 
 ; Puzzles
 

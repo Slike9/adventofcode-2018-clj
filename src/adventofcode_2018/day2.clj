@@ -1,5 +1,4 @@
 (ns adventofcode-2018.day2
-  (:gen-class)
   (:require [clojure.java.io :as jio]))
 
 ; Utils
@@ -9,7 +8,7 @@
   (with-open [r (jio/reader file-path)]
     (->> r
          line-seq
-         doall)))
+         (into []))))
 
 (defn contains-any-char-n-times?
   [s n]
@@ -17,13 +16,11 @@
        frequencies
        (some #(= (val %) n))))
 
-(defn count-predicate
-  [f coll]
-  (reduce #(if (f %2) (inc %1) %1) 0 coll))
-
 (defn count-contain-any-char-n-times
   [coll n]
-  (count-predicate #(contains-any-char-n-times? % n) coll))
+  (->> coll
+       (filter #(contains-any-char-n-times? % n))
+       count))
 
 (defn strs-differ-by-one-char?
   [s1 s2]
